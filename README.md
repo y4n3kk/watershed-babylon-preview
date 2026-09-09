@@ -2,7 +2,7 @@
 
 A compiled preview build of Watershed Babylon, published so it can be opened on a phone or any browser without a local server. **This repository contains no source code**, only the output of a production build.
 
-Current build: `claude/55-belly-transition` at `9f02b2bd4d95edf6e05d11c149d4f20a1747b2b3`, the head of pull request #85 in the private source repository.
+Current build: line-behaviour candidate on top of PR #85. Not merged, published for the owner to judge by feel.
 
 ## What this build changes
 
