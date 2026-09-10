@@ -12,26 +12,6 @@ What ships today.
 
 The preserved build at `bfe73b45237790a88188e2a1f01c010c7e395041`, built unchanged. Not a reconstruction: the actual thing. It predates the finite mend stroke, the current fish and hooking model and the current material accounting, so the game around the line differs too.
 
-### [Line lifted](https://y4n3kk.github.io/watershed-babylon-preview/line-lifted/) — issue 94, the dashed line
-
-The current build with **one number changed**: a floating line now rides 0.12 m above the film instead of 0.04 m.
-
-The drawn river is displaced in the vertex shader, and its wave amplitude reaches about 0.14 m in shallow turbulent water:
-
-```
-wsWaveAmp = 0.14 * smoothstep(0.28, 0.8, turbulence)
-                 * smoothstep(1.1, 0.35, depth)
-          + 0.01 * turbulence
-```
-
-The line rode 0.04 m. So wave crests rose over it, in patches, wherever a crest happened to be along its length, moving as the waves move. A line intermittently swallowed along its own length is a dashed line — and it explains why it is only sometimes, and only in places.
-
-**This is a stopgap and should be judged as one.** A floating line ought to RIDE the displaced surface, rising and falling with each wave, rather than hovering at a fixed height above the mean. That needs the shader's wave displacement to be available where the line's height is decided, and it is not today. Lifting the line trades a line that vanishes in patches for a line that may sit visibly too high in calm water.
-
-**What to look for:** whether the dashes are gone, and whether the line now looks like it is floating above the water rather than on it. If both, the real fix is worth the work.
-
-Two earlier candidates for this were ruled out by measurement: the water-film ownership PR #90 addressed (measured correctly inert for a floating line), and per-vertex opacity (smooth along the fly line, so it cannot band it).
-
 ### [Rod cast load](https://y4n3kk.github.io/watershed-babylon-preview/rod-load/) — the test version
 
 The current build with **one change**: the rod now loads against the line's mass while it is being swung.
