@@ -1,4 +1,4 @@
-import{t as e}from"./shaderStore-D-XQlhUT.js";import{t}from"./packingFunctions-Zjmt0YZ0.js";import{t as n}from"./clipPlaneFragmentDeclaration-Dztv0IA8.js";import{t as r}from"./clipPlaneFragment-CWY7C38Z.js";import{t as i}from"./logDepthDeclaration-BpsZdJ7z.js";import{t as a}from"./fogFragmentDeclaration-B3hbo39x.js";import{t as o}from"./logDepthFragment-CxtJswLx.js";import{t as s}from"./fogFragment-C9E3EVJj.js";import{a as c}from"./index-COZNjXBh.js";var l=`gaussianSplattingPixelShader`,u=`#include<clipPlaneFragmentDeclaration>
+import{t as e}from"./shaderStore-D-XQlhUT.js";import{t}from"./packingFunctions-Zjmt0YZ0.js";import{t as n}from"./clipPlaneFragmentDeclaration-Dztv0IA8.js";import{t as r}from"./clipPlaneFragment-CWY7C38Z.js";import{t as i}from"./logDepthDeclaration-BpsZdJ7z.js";import{t as a}from"./fogFragmentDeclaration-B3hbo39x.js";import{t as o}from"./logDepthFragment-CxtJswLx.js";import{t as s}from"./fogFragment-C9E3EVJj.js";import{a as c}from"./index-BqRBL85A.js";var l=`gaussianSplattingPixelShader`,u=`#include<clipPlaneFragmentDeclaration>
 #include<logDepthDeclaration>
 #include<fogFragmentDeclaration>
 #ifdef GPUPICKER_PACK_DEPTH
