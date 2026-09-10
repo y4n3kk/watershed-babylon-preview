@@ -54,8 +54,19 @@ Cast on each build in turn and watch the rod itself, not the line.
 
 Then fish a drift on the test version and check the line still behaves the way you preferred — that part is meant to be untouched.
 
-## Not yet claimed
+## Test result, and its cost
 
-The full test suite result for the test version is not in at the time of writing. This is published for feel, not proposed for merging.
+Full suite on the test version: **1067 passed, 2 failed**. Neither failure is a line or a rod test:
 
-Reference 0 also draws its rod as two pieces, a fixed handle and a flexing shaft, which can visibly part company. That is a separate matter from whether the rod loads, and is not addressed here.
+- `hookable resident encounters (p41)` — a drift engages a resident fish through its own full encounter while the hero never notices
+- `production player QA scenarios` — two-cast revisions to terminal debriefs across seeds
+
+Both are fish-encounter tests. The rod change shifts the simulation trajectory: the fly drifts at 1.14 times the water speed where it was 1.08, so it arrives in different places, so fish engage differently and the scripted scenarios reach different outcomes.
+
+That is the honest cost of this change. The rod loading is physically right and the drawn line is untouched, but it moves where the fly goes, and this project guards fish outcomes deliberately. Whether that is acceptable depends on whether the new drift speed is more correct or merely different, which is not yet established.
+
+Published for feel, not proposed for merging.
+
+## Also not addressed
+
+Reference 0 draws its rod as two pieces, a fixed handle and a flexing shaft, which can visibly part company. That is a separate matter from whether the rod loads, and is not touched here.
