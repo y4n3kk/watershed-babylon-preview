@@ -12,30 +12,25 @@ What ships today.
 
 The preserved build at `bfe73b45237790a88188e2a1f01c010c7e395041`, built unchanged. Not a reconstruction: the actual thing. It predates the finite mend stroke, the current fish and hooking model and the current material accounting, so the game around the line differs too.
 
-### [Line visibility](https://y4n3kk.github.io/watershed-babylon-preview/line-visible/) — issues 94 and 99
+### [Line lifted](https://y4n3kk.github.io/watershed-babylon-preview/line-lifted/) — issue 94, the dashed line
 
-The current build with **one change**: a floor under how faint a strand may be drawn.
+The current build with **one number changed**: a floating line now rides 0.12 m above the film instead of 0.04 m.
 
-Every vertex of the drawn chain carries its own opacity, computed from that vertex's own distance and its strand's own diameter, through a function called with **no minimum at all**. So the line faded out along its own length. Measured over a 424-tick drift from the angler's eye:
-
-| | before | after |
-| --- | --- | --- |
-| faintest vertex opacity | 0.018 | **0.400** |
-| frames with a near-invisible vertex | 424 of 424 | **0 of 424** |
-| worst jump between neighbouring vertices | 0.277 | **0.030** |
-| frames with a cliff edge over 0.25 | 20 % | **0 %** |
-
-Opacity along the chain before the change, with cliff edges at both junctions:
+The drawn river is displaced in the vertex shader, and its wave amplitude reaches about 0.14 m in shallow turbulent water:
 
 ```
-fly line  0.50 0.49 0.48 ... 0.38 0.37
-leader    0.10 0.09 0.09 ... 0.07 0.06
-tippet    0.02 0.02 0.02 0.02 0.02 0.02
+wsWaveAmp = 0.14 * smoothstep(0.28, 0.8, turbulence)
+                 * smoothstep(1.1, 0.35, depth)
+          + 0.01 * turbulence
 ```
 
-This is upstream of the water entirely: a floating line, a sunk line and a line in the air were all subject to it. It is a separate cause from the film ownership PR #90 addressed, which was measured and found correctly inert for a floating line.
+The line rode 0.04 m. So wave crests rose over it, in patches, wherever a crest happened to be along its length, moving as the waves move. A line intermittently swallowed along its own length is a dashed line — and it explains why it is only sometimes, and only in places.
 
-**The trade to judge:** beyond the near fly line everything now sits at the floor, so the taper from fly line to leader to tippet is flattened. A finer strand should still read as finer. If the line now looks uniform, the floor is too high; if it still breaks up, too low.
+**This is a stopgap and should be judged as one.** A floating line ought to RIDE the displaced surface, rising and falling with each wave, rather than hovering at a fixed height above the mean. That needs the shader's wave displacement to be available where the line's height is decided, and it is not today. Lifting the line trades a line that vanishes in patches for a line that may sit visibly too high in calm water.
+
+**What to look for:** whether the dashes are gone, and whether the line now looks like it is floating above the water rather than on it. If both, the real fix is worth the work.
+
+Two earlier candidates for this were ruled out by measurement: the water-film ownership PR #90 addressed (measured correctly inert for a floating line), and per-vertex opacity (smooth along the fly line, so it cannot band it).
 
 ### [Rod cast load](https://y4n3kk.github.io/watershed-babylon-preview/rod-load/) — the test version
 
