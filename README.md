@@ -4,7 +4,15 @@ Four builds of the same game, differing only in how the fly line behaves. Publis
 
 All four are the current build (`c3847d6`) with one line change each. Every number below is measured on the same deterministic drift.
 
-## The four
+## The five
+
+### [Reference 0 itself](https://y4n3kk.github.io/watershed-babylon-preview/reference-0/)
+
+The preserved build at commit `bfe73b45237790a88188e2a1f01c010c7e395041`, built and published unchanged. Not a reconstruction: the actual thing, as it was.
+
+Worst joint turn **94.3 deg** · bow collapse **18.0x** an ordinary tick.
+
+It predates a great deal of later work, so much of the rest of the game differs too: no finite mend stroke, no rod flex under the line, an older fish and hooking model, different material accounting. Judge the LINE here, not the game around it.
 
 ### [Current](https://y4n3kk.github.io/watershed-babylon-preview/)
 
