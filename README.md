@@ -27,7 +27,11 @@ Every vertex of the drawn chain carries its own opacity, computed from that vert
 
 Opacity along the chain before the change, with cliff edges at both junctions:
 
-
+```
+fly line  0.50 0.49 0.48 ... 0.38 0.37
+leader    0.10 0.09 0.09 ... 0.07 0.06
+tippet    0.02 0.02 0.02 0.02 0.02 0.02
+```
 
 This is upstream of the water entirely: a floating line, a sunk line and a line in the air were all subject to it. It is a separate cause from the film ownership PR #90 addressed, which was measured and found correctly inert for a floating line.
 
