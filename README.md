@@ -1,71 +1,61 @@
-# Watershed Babylon — line comparison
+# Watershed Babylon — build preview
 
-Four builds of the same game, differing only in how the fly line behaves. Published to be judged by feel on a phone. **This repository contains no source code**, only build output.
+Compiled builds, published to be judged by feel on a phone. **This repository contains no source code**, only build output.
 
-All four are the current build (`c3847d6`) with one line change each. Every number below is measured on the same deterministic drift.
-
-## The five
-
-### [Reference 0 itself](https://y4n3kk.github.io/watershed-babylon-preview/reference-0/)
-
-The preserved build at commit `bfe73b45237790a88188e2a1f01c010c7e395041`, built and published unchanged. Not a reconstruction: the actual thing, as it was.
-
-Worst joint turn **94.3 deg** · bow collapse **18.0x** an ordinary tick.
-
-It predates a great deal of later work, so much of the rest of the game differs too: no finite mend stroke, no rod flex under the line, an older fish and hooking model, different material accounting. Judge the LINE here, not the game around it.
+## The three
 
 ### [Current](https://y4n3kk.github.io/watershed-babylon-preview/)
 
-What ships today. The line is drawn with 46 points, smoothed at the touchdown join.
+What ships today.
 
-Worst joint turn **25.1 deg** · bow collapse **4.7x** an ordinary tick · passes every test.
+### [Reference 0](https://y4n3kk.github.io/watershed-babylon-preview/reference-0/)
 
-### [A — reference 0's drawing resolution](https://y4n3kk.github.io/watershed-babylon-preview/line-a/)
+The preserved build at `bfe73b45237790a88188e2a1f01c010c7e395041`, built unchanged. Not a reconstruction: the actual thing. It predates the finite mend stroke, the current fish and hooking model and the current material accounting, so the game around the line differs too.
 
-The only change is how finely the line is drawn: **20 points instead of 46**, which is what reference 0 used. The shape maths is untouched.
+### [Rod cast load](https://y4n3kk.github.io/watershed-babylon-preview/rod-load/) — the test version
 
-Worst joint turn **40.3 deg** · bow collapse **3.6x**, the calmest of the four.
+The current build with **one change**: the rod now loads against the line's mass while it is being swung.
 
-The higher joint figure is the same curve sampled more coarsely, not a new bend.
+## What the test version changes, and why
 
-### [B — reference 0's resolution and its shape maths](https://y4n3kk.github.io/watershed-babylon-preview/line-b/)
+The owner's judgement was that reference 0 has the better rod actuation and cast, and the current build the better drift and strip. Measuring the rod through a cast on the same deterministic scenario found the reason, and it is not subtle:
 
-A, plus reference 0's own line-shape function: a plain half-sine bow rather than its square, a linear descent into the water with no rounded join, and the S-waves confined to the wet run.
+| rodBend01 | reference 0 | current | test version |
+| --- | --- | --- | --- |
+| **through a cast** | **0.650** | **0.037** | **0.608 peak, 0.342 median** |
+| drift | 0.079 | 0.119 | 0.116 |
+| retrieve | 0.120 | 0.066 | 0.064 |
 
-Worst joint turn **56.1 deg** · bow collapse **3.3x**.
+The current build's rod deflection is drawn from a hooked fish, or from the line's tow while drifting or retrieving. **There was no term at all for the rod being swung.** Through a whole cast the reaction was therefore zero and the blank had nothing left but its fixed 0.048 m gravity droop — a straight stick with a millimetre of sag, by construction.
 
-Reintroduces a corner where the line meets the water. That corner is the one visible in the owner's phone recording and removed in PR #91.
+Reference 0 takes it from the stroke's own energy, `clamp(0.1 + energy01 * 0.55, 0.1, 0.7)`, which is the right quantity: a cast IS the rod loading against the line's mass as the angler accelerates it. The test version uses that same mapping.
 
-### [D — the full reconstruction](https://y4n3kk.github.io/watershed-babylon-preview/line-d/)
+Only the casting branch is added. Fighting, drifting and retrieving keep exactly the reaction they had.
 
-B, plus reference 0's rule for how much line lies on the water (a linear touchdown slide rather than a rooted one).
+## The drift is not traded away
 
-Worst joint turn **113.6 deg** · bow collapse **18.5x**.
+Measured over the same 425-tick drift:
 
-## The thing to know before judging
+| | current | test version |
+| --- | --- | --- |
+| worst joint turn | 25.1 deg | **19.4 deg** |
+| drift ticks showing a corner | 0 % | 0 % |
+| bow collapse | 4.7x | 4.8x |
+| rod bend, median | 0.119 | 0.116 |
 
-Reference 0's line is **the snapping line**. Its measured bow-collapse rate is 18.0x an ordinary tick; D reproduces that at 18.5x, against 4.7x for what ships today.
-
-That collapse is what the owner originally reported: the line going "from belly to straight in seemingly one tick when fully tensioned". It is a property of reference 0, and reconstructing reference 0's line brings it back.
-
-D is in fact slightly worse than reference 0 on this, because it puts reference 0's line under the current build's much more energetic rod and mend. Those two were never designed together.
-
-So "make it like reference 0" and "stop it snapping" pull in opposite directions. This lineup exists so the owner can decide which they actually want, by feel rather than by argument.
+One thing did move: the fly now drifts at 1.14 times the water speed where it was 1.08, and the rod tip's peak speed during a drift rose from 7.15 to 14.52 m/s. That is the loaded rod unloading as the cast settles, which is a rod doing what a rod does, but it is a real behaviour change and worth watching for.
 
 ## What to look for
 
-Fish a drift on each, and mend it.
+Cast on each build in turn and watch the rod itself, not the line.
 
-- **Line texture.** A, B and D draw a coarser, more faceted line. Current draws a smoother one. This is the most immediately visible difference.
-- **Where the line meets the water.** B and D put a corner there. Current and A do not.
-- **Coming tight.** Watch the belly as the line straightens. On D it should give way suddenly. On current it should ease.
+- On **current**, the blank should stay essentially straight through the stroke.
+- On **reference 0** and the **test version**, it should bow under the load and come back.
 
-## Test status, honestly
+Then fish a drift on the test version and check the line still behaves the way you preferred — that part is meant to be untouched.
 
-None of A, B or D passes the project's checks as they stand.
+## Not yet claimed
 
-- **A** fails one test, `line-kink`, which asserts no joint ever turns past 30 degrees. That test was written against a 46-point line and inflates when the line is drawn with 20. That is a fault in the test, not in A.
-- **B** fails the same one test.
-- **D** fails two: the same one, and a bound on how fast the bow may collapse.
+The full test suite result for the test version is not in at the time of writing. This is published for feel, not proposed for merging.
 
-These are published for judgement, not proposed for merging. Whichever is chosen gets done properly.
+Reference 0 also draws its rod as two pieces, a fixed handle and a flexing shaft, which can visibly part company. That is a separate matter from whether the rod loads, and is not addressed here.
