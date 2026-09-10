@@ -12,6 +12,27 @@ What ships today.
 
 The preserved build at `bfe73b45237790a88188e2a1f01c010c7e395041`, built unchanged. Not a reconstruction: the actual thing. It predates the finite mend stroke, the current fish and hooking model and the current material accounting, so the game around the line differs too.
 
+### [Line visibility](https://y4n3kk.github.io/watershed-babylon-preview/line-visible/) — issues 94 and 99
+
+The current build with **one change**: a floor under how faint a strand may be drawn.
+
+Every vertex of the drawn chain carries its own opacity, computed from that vertex's own distance and its strand's own diameter, through a function called with **no minimum at all**. So the line faded out along its own length. Measured over a 424-tick drift from the angler's eye:
+
+| | before | after |
+| --- | --- | --- |
+| faintest vertex opacity | 0.018 | **0.400** |
+| frames with a near-invisible vertex | 424 of 424 | **0 of 424** |
+| worst jump between neighbouring vertices | 0.277 | **0.030** |
+| frames with a cliff edge over 0.25 | 20 % | **0 %** |
+
+Opacity along the chain before the change, with cliff edges at both junctions:
+
+
+
+This is upstream of the water entirely: a floating line, a sunk line and a line in the air were all subject to it. It is a separate cause from the film ownership PR #90 addressed, which was measured and found correctly inert for a floating line.
+
+**The trade to judge:** beyond the near fly line everything now sits at the floor, so the taper from fly line to leader to tippet is flattened. A finer strand should still read as finer. If the line now looks uniform, the floor is too high; if it still breaks up, too low.
+
 ### [Rod cast load](https://y4n3kk.github.io/watershed-babylon-preview/rod-load/) — the test version
 
 The current build with **one change**: the rod now loads against the line's mass while it is being swung.
